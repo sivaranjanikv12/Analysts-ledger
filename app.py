@@ -217,6 +217,15 @@ DATA = {
          "interview": "EV/EBITDA is my default for comparing companies with different leverage or tax structures; EV/Revenue for pre-profitability growth companies; P/E for stable, mature, similarly-structured peers."},
     ],
     "6 · SAPM": [
+        {"term": "Expense Ratio", "star": True,
+         "definition": "The annual percentage of a fund's assets used to cover the fund's operating expenses.",
+         "example": "If a mutual fund has an expense ratio of 1%, approximately ₹1 is charged annually for every ₹100 invested.",
+         "formula": "Expense Ratio = Fund Operating Expenses / Average Assets Under Management",
+         "worked": "Average AUM = ₹100 crore, Operating Expenses = ₹1 crore → Expense Ratio = 1%",
+         "hi": "Higher expense ratio → higher cost to the investor and a larger return drag.",
+         "lo": "Lower expense ratio → lower cost and less return drag, all else equal.",
+         "strategy": "Compare expense ratios among funds with similar investment objectives and performance characteristics.",
+         "interview": "Expense ratio is the annual operating cost charged by a mutual fund as a percentage of its assets. When comparing similar funds, a lower expense ratio reduces the return drag on investors, although cost should be considered alongside performance and portfolio strategy."},
         {"term": "Sharpe Ratio", "star": True,
          "definition": "Excess return per unit of total risk (volatility) — the most widely quoted risk-adjusted performance metric.",
          "example": "Renaissance's Medallion Fund reportedly posted Sharpe ratios well above 2, versus ~0.5-1.0 for typical long-only strategies.",
@@ -337,6 +346,114 @@ DATA = {
     ],
 }
 
+# ============================================================
+# MASTER FINANCE DICTIONARY
+# ============================================================
+
+FINANCE_TERMS = sorted(set([
+    "Accounts Payable",
+    "Accounts Receivable",
+    "Accrued Expenses",
+    "Alpha",
+    "Amortization",
+    "Annuity",
+    "Asset Turnover",
+    "Beta",
+    "Bond",
+    "Bond Valuation",
+    "Book Value",
+    "Break-Even Point",
+    "CAPM",
+    "Capital Expenditure",
+    "Capital Structure",
+    "Cash Conversion Cycle",
+    "Cash Flow",
+    "Cash Flow Statement",
+    "Cost of Capital",
+    "Cost of Debt",
+    "Cost of Equity",
+    "Cost of Goods Sold",
+    "Current Ratio",
+    "Debt-to-Equity",
+    "Deferred Tax",
+    "Depreciation",
+    "Dividend",
+    "Dividend Yield",
+    "Discount Factor",
+    "Discount Rate",
+    "Discounted Cash Flow",
+    "DSO",
+    "EBIT",
+    "EBITDA",
+    "Earnings Per Share",
+    "Economic Value Added",
+    "Enterprise Value",
+    "Equity Value",
+    "Expense Ratio",
+    "Expected Return",
+    "FCFE",
+    "FCFF",
+    "Financial Leverage",
+    "Financial Risk",
+    "Fixed Assets",
+    "Fixed Income",
+    "Free Cash Flow",
+    "Future Value",
+    "Gross Margin",
+    "Gross Profit",
+    "Hedge",
+    "Hurdle Rate",
+    "Income Statement",
+    "Information Ratio",
+    "Interest Coverage Ratio",
+    "Interest Expense",
+    "Internal Rate of Return",
+    "Inventory Turnover",
+    "IRR",
+    "Jensen's Alpha",
+    "Liquidity",
+    "Liquidity Ratio",
+    "Market Capitalization",
+    "Net Asset Value",
+    "Net Income",
+    "Net Present Value",
+    "Operating Cash Flow",
+    "Operating Expenses",
+    "Operating Margin",
+    "Operating Profit",
+    "Options",
+    "Payback Period",
+    "P/E Ratio",
+    "P/B Ratio",
+    "Perpetuity",
+    "Portfolio",
+    "Present Value",
+    "Price-to-Book Ratio",
+    "Price-to-Earnings Ratio",
+    "Profit Margin",
+    "Quick Ratio",
+    "Return on Assets",
+    "Return on Equity",
+    "Revenue",
+    "ROA",
+    "ROCE",
+    "ROE",
+    "Sharpe Ratio",
+    "Simple Interest",
+    "Sortino Ratio",
+    "Standard Deviation",
+    "Systematic Risk",
+    "Terminal Value",
+    "Time Value of Money",
+    "Tracking Error",
+    "Treynor Ratio",
+    "Value at Risk",
+    "WACC",
+    "Working Capital",
+    "Yield",
+    "Yield Curve"
+]))
+
 # -----------------------------
 # Styling
 # -----------------------------
@@ -445,7 +562,7 @@ st.markdown(
 st.sidebar.title("📚 Navigation")
 page = st.sidebar.radio(
     "Go to",
-    ["Course Revision", "Search", "Random ⭐ Quiz"]
+    ["Course Revision", "Finance Dictionary", "Search", "Random ⭐ Quiz"]
 )
 
 # -----------------------------
@@ -470,6 +587,48 @@ if page == "Course Revision":
     selected = next(t for t in terms if t["term"] == selected_name)
 
     render_term(selected)
+
+
+# -----------------------------
+# Finance Dictionary
+# -----------------------------
+
+elif page == "Finance Dictionary":
+
+    st.header("📖 Finance Dictionary")
+
+    st.write(
+        "Start typing a finance term. Matching terms will appear automatically."
+    )
+
+    selected_term = st.selectbox(
+        "Search Finance Terms",
+        FINANCE_TERMS,
+        index=None,
+        placeholder="Type something like Exp, WACC, Sharpe..."
+    )
+
+    if selected_term:
+
+        # Find the selected term in your structured DATA
+        found_term = None
+
+        for course, terms in DATA.items():
+            for term in terms:
+                if term["term"].lower() == selected_term.lower():
+                    found_term = term
+                    break
+
+            if found_term:
+                break
+
+        if found_term:
+            render_term(found_term)
+
+        else:
+            st.warning(
+                f"No data found for **{selected_term}** in your Analyst's Ledger yet."
+            )
 
 # -----------------------------
 # Search
