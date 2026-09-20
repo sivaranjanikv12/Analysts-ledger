@@ -583,7 +583,7 @@ User's question:
 
 answer = response.output_text
 
-        st.markdown(answer)
+st.markdown(answer)
 
         st.session_state.chat_messages.append(
             {
