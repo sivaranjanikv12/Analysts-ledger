@@ -1,8 +1,6 @@
 import streamlit as st
 import random
-from openai import OpenAI
 
-client = OpenAI(api_key=st.secrets["OPENAI_API_KEY"])
 
 st.set_page_config(
     page_title="The Analyst's Ledger",
@@ -527,59 +525,3 @@ else:
         else:
             st.warning("No starred concepts were found.")
 
-# ============================================================
-# AI CHATBOT
-# ============================================================
-
-st.sidebar.markdown("---")
-st.sidebar.header("🤖 AI Finance Assistant")
-
-if "chat_messages" not in st.session_state:
-    st.session_state.chat_messages = []
-
-for message in st.session_state.chat_messages:
-    with st.chat_message(message["role"]):
-        st.markdown(message["content"])
-
-question = st.chat_input("Ask any finance question...")
-
-if question:
-
-    st.session_state.chat_messages.append({
-        "role": "user",
-        "content": question
-    })
-
-    with st.chat_message("user"):
-        st.markdown(question)
-
-    with st.chat_message("assistant"):
-
-        response = client.responses.create(
-            model="gpt-5-mini",
-            input=f"""
-You are the AI Finance Assistant inside The Analyst's Ledger.
-
-Answer the user's finance question clearly and accurately.
-
-Structure your answer using:
-
-1. Definition
-2. Formula (if applicable)
-3. Simple Example
-4. Key Insight
-5. Interview Answer
-
-User's question:
-{question}
-"""
-        )
-
-        answer = response.output_text
-
-        st.markdown(answer)
-
-        st.session_state.chat_messages.append({
-            "role": "assistant",
-            "content": answer
-        })
