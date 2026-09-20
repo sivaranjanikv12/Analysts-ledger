@@ -541,35 +541,29 @@ for message in st.session_state.chat_messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-question = st.chat_input(
-    "Ask any finance question..."
-)
+question = st.chat_input("Ask any finance question...")
 
 if question:
 
-    st.session_state.chat_messages.append(
-        {
-            "role": "user",
-            "content": question
-        }
-    )
+    st.session_state.chat_messages.append({
+        "role": "user",
+        "content": question
+    })
 
     with st.chat_message("user"):
         st.markdown(question)
 
     with st.chat_message("assistant"):
 
-        st.write("Thinking...")
-
-        # We will connect the AI here in the next step.
-response = client.responses.create(
-    model="gpt-5-mini",
-    input=f"""
+        response = client.responses.create(
+            model="gpt-5-mini",
+            input=f"""
 You are the AI Finance Assistant inside The Analyst's Ledger.
 
 Answer the user's finance question clearly and accurately.
 
 Structure your answer using:
+
 1. Definition
 2. Formula (if applicable)
 3. Simple Example
@@ -579,15 +573,13 @@ Structure your answer using:
 User's question:
 {question}
 """
-)
-
-answer = response.output_text
-
-st.markdown(answer)
-
-        st.session_state.chat_messages.append(
-            {
-                "role": "assistant",
-                "content": answer
-            }
         )
+
+        answer = response.output_text
+
+        st.markdown(answer)
+
+        st.session_state.chat_messages.append({
+            "role": "assistant",
+            "content": answer
+        })
